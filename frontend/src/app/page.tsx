@@ -154,7 +154,7 @@ const TodoPage = () => {
                 <TableCell>
                   <Checkbox className="" checked={task.completed} />
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <Button
                     variant="outline"
                     size="sm"
@@ -167,7 +167,7 @@ const TodoPage = () => {
                   >
                     <Pencil className="w-4 h-4" />
                   </Button>
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                   <Button
                     variant="destructive"
@@ -193,7 +193,7 @@ const TodoPage = () => {
         fetchTodos={fetchTodos}
       />
 
-      <TodoModal open={editModal} onOpenChange={setEditModal} isEdit={true} />
+      {/* <TodoModal open={editModal} onOpenChange={setEditModal} isEdit={true} /> */}
     </div>
   );
 };
