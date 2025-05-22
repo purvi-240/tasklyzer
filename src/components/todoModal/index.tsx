@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { Card, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardFooter } from "../ui/card";
 import { Label } from "@/components/ui/label";
 import {
   Popover,
@@ -14,23 +14,23 @@ import { Calendar } from "@/components/ui/calendar";
 
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Dialog } from "../ui/dialog";
-import { DialogContent } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 
-const TodoModal = (props) => {
-  const { open, onOpenChange } = props;
+const TodoModal = (props: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  isEdit: boolean;
+}) => {
+  const { open, onOpenChange, isEdit } = props;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState<Date>();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="backdrop-blur-sm bg-black/30 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full h-full p-6 rounded-lg shadow-xl">
+      <DialogContent className="justify-items-center bg-blue-100">
+        <DialogTitle>{isEdit ? "Edit Todo" : "Create Todo"}</DialogTitle>
         <Card className="w-[350px] p-8">
-          <CardHeader>
-            <CardTitle className="text-center">Create Todo</CardTitle>
-          </CardHeader>
-
           <div className="mb-3">
             <Label htmlFor="">Title</Label>
             <Input
@@ -70,7 +70,7 @@ const TodoModal = (props) => {
           </div>
           <div></div>
           <CardFooter>
-            <Button className=" bg-blue-200 hover:bg-blue-400 text-black-800 font-medium">
+            <Button className="hover:bg-[#0077b6] bg-[#0096c7] text-white font-bold">
               Add Todo
             </Button>
           </CardFooter>

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 import { Button } from "../components/ui/button";
 import { CirclePlus } from "lucide-react";
 import {
@@ -10,17 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogTrigger,
-} from "../components/ui/dialog";
 import TodoModal from "@/components/todoModal";
+import { Pencil } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 type Task = {
   name: string;
@@ -99,25 +93,25 @@ const dummyTasks: Task[] = [
 
 const TodoPage = () => {
   const [addModal, setAddModal] = useState<boolean>(false);
-
+  const [editModal, setEditModal] = useState<boolean>(false);
   return (
-    <div>
-      <div>
-        <div className="flex justify-end p-4">
-          <Button variant="default" size="sm" onClick={() => setAddModal(true)}>
-            <CirclePlus className="mr-1" /> Add Task
-          </Button>
-        </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Name</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Due Date</TableHead>
-              <TableHead>Completed</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody></TableBody>
+    <div className="p-6 bg-slate-100">
+      <div className="flex justify-between  items-center">
+        <Image src="/assets/logo.png" alt="Logo" width={120} height={120} />
+        <Button variant="default" size="sm" onClick={() => setAddModal(true)}>
+          <CirclePlus className="mr-1" /> Add Task
+        </Button>
+      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Name</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Due Date</TableHead>
+            <TableHead>Completed</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {dummyTasks.map((task, index) => {
             return (
               <TableRow key={index}>
@@ -125,14 +119,47 @@ const TodoPage = () => {
                 <TableCell>{task.description}</TableCell>
                 <TableCell>{task.due_date}</TableCell>
                 <TableCell>
-                  <Checkbox checked={task.completed} />
+                  <Checkbox className="" checked={task.completed} />
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setEditModal(true);
+                      console.log("Edit", task);
+                    }}
+                    // color=" text-muted-foreground"
+                    className="flex items-center gap-1 text-blue-500 border-blue-300 hover:text-blue-600 hover:border-blue-400"
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </Button>
+                  {/* <Button
+                    variant="destructive"
+                    size="sm"
+                    className="flex items-center gap-1 bg-red-100 text-black-700 hover:bg-red-400"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Delete
+                  </Button> */}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="flex items-center gap-1 bg-red-100 text-black-700 hover:bg-red-400"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </TableCell>
               </TableRow>
             );
           })}
-        </Table>
-        <TodoModal open={addModal} onOpenChange={setAddModal} />
-      </div>
+        </TableBody>
+      </Table>
+      <TodoModal open={addModal} onOpenChange={setAddModal} isEdit={false} />
+
+      <TodoModal open={editModal} onOpenChange={setEditModal} isEdit={true} />
     </div>
   );
 };
