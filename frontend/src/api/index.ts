@@ -29,3 +29,15 @@ export const addTodo = async(title: string, description: string, due_date: Date)
      
     return response.data;
 }
+
+export const deleteTodo = async(id: string) => {
+    let config = {
+        method: 'delete',
+        url: `http://localhost:4000/todos/${id}`,
+        header:{}
+    }
+
+    const response = await axios(config);
+
+    return response.data;
+}

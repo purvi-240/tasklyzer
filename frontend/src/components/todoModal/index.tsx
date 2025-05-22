@@ -21,16 +21,23 @@ const TodoModal = (props: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   isEdit: boolean;
+  fetchTodos: Function;
 }) => {
-  const { open, onOpenChange, isEdit } = props;
+  const { open, onOpenChange, isEdit, fetchTodos } = props;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date>(new Date());
 
   const createTodo = async () => {
     const response = await addTodo(title, description, date);
     console.log("todo created");
+    fetchTodos();
+    onOpenChange(false);
+    setTitle("");
+    setDescription("");
+    setDate(new Date());
   };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="justify-items-center bg-blue-100">

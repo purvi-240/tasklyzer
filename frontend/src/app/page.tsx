@@ -15,9 +15,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import TodoModal from "@/components/todoModal";
 import { Pencil } from "lucide-react";
 import { Trash2 } from "lucide-react";
-import { getTodos } from "@/api";
+import { deleteTodo, getTodos } from "@/api";
 
 type Task = {
+  id: number;
   title: string;
   description: string;
   due_date: string;
@@ -26,66 +27,77 @@ type Task = {
 
 const dummyTasks: Task[] = [
   {
+    id: 1,
     title: "Task 1",
     description: "Complete project documentation",
     due_date: "2025-05-25",
     completed: false,
   },
   {
+    id: 2,
     title: "Task 2",
     description: "Fix login page bug",
     due_date: "2025-05-23",
     completed: true,
   },
   {
+    id: 3,
     title: "Task 3",
     description: "Prepare presentation slides",
     due_date: "2025-05-27",
     completed: false,
   },
   {
+    id: 4,
     title: "Task 4",
     description: "Team meeting with backend developers",
     due_date: "2025-05-22",
     completed: true,
   },
   {
+    id: 5,
     title: "Task 5",
     description: "Review pull requests",
     due_date: "2025-05-24",
     completed: false,
   },
   {
+    id: 6,
     title: "Task 6",
     description: "Integrate payment gateway",
     due_date: "2025-05-28",
     completed: false,
   },
   {
+    id: 7,
     title: "Task 7",
     description: "Send weekly report",
     due_date: "2025-05-21",
     completed: true,
   },
   {
+    id: 8,
     title: "Task 8",
     description: "Optimize database queries",
     due_date: "2025-05-26",
     completed: false,
   },
   {
+    id: 9,
     title: "Task 9",
     description: "Deploy new version to staging",
     due_date: "2025-05-22",
     completed: true,
   },
   {
+    id: 10,
     title: "Task 10",
     description: "Design landing page",
     due_date: "2025-05-30",
     completed: false,
   },
   {
+    id: 11,
     title: "Task 11",
     description: "Learning Gen AI",
     due_date: "2025-05-30",
@@ -98,6 +110,14 @@ const TodoPage = () => {
   const [editModal, setEditModal] = useState<boolean>(false);
 
   const [tasks, setTasks] = useState<Task[]>([]);
+
+  const fetchTodos = () => {
+    getTodos()
+      .then((newTodos) => setTasks(newTodos))
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
     getTodos()
@@ -147,20 +167,16 @@ const TodoPage = () => {
                   >
                     <Pencil className="w-4 h-4" />
                   </Button>
-                  {/* <Button
-                    variant="destructive"
-                    size="sm"
-                    className="flex items-center gap-1 bg-red-100 text-black-700 hover:bg-red-400"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    Delete
-                  </Button> */}
                 </TableCell>
                 <TableCell>
                   <Button
                     variant="destructive"
                     size="sm"
                     className="flex items-center gap-1 bg-red-100 text-black-700 hover:bg-red-400"
+                    onClick={async () => {
+                      const response = await deleteTodo(task.id.toString());
+                      fetchTodos();
+                    }}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -170,7 +186,12 @@ const TodoPage = () => {
           })}
         </TableBody>
       </Table>
-      <TodoModal open={addModal} onOpenChange={setAddModal} isEdit={false} />
+      <TodoModal
+        open={addModal}
+        onOpenChange={setAddModal}
+        isEdit={false}
+        fetchTodos={fetchTodos}
+      />
 
       <TodoModal open={editModal} onOpenChange={setEditModal} isEdit={true} />
     </div>
