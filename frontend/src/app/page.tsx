@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "../components/ui/button";
 import { CirclePlus } from "lucide-react";
@@ -15,76 +15,78 @@ import { Checkbox } from "@/components/ui/checkbox";
 import TodoModal from "@/components/todoModal";
 import { Pencil } from "lucide-react";
 import { Trash2 } from "lucide-react";
+import { getTodos } from "@/api";
 
 type Task = {
-  name: string;
+  title: string;
   description: string;
   due_date: string;
   completed: boolean;
 };
+
 const dummyTasks: Task[] = [
   {
-    name: "Task 1",
+    title: "Task 1",
     description: "Complete project documentation",
     due_date: "2025-05-25",
     completed: false,
   },
   {
-    name: "Task 2",
+    title: "Task 2",
     description: "Fix login page bug",
     due_date: "2025-05-23",
     completed: true,
   },
   {
-    name: "Task 3",
+    title: "Task 3",
     description: "Prepare presentation slides",
     due_date: "2025-05-27",
     completed: false,
   },
   {
-    name: "Task 4",
+    title: "Task 4",
     description: "Team meeting with backend developers",
     due_date: "2025-05-22",
     completed: true,
   },
   {
-    name: "Task 5",
+    title: "Task 5",
     description: "Review pull requests",
     due_date: "2025-05-24",
     completed: false,
   },
   {
-    name: "Task 6",
+    title: "Task 6",
     description: "Integrate payment gateway",
     due_date: "2025-05-28",
     completed: false,
   },
   {
-    name: "Task 7",
+    title: "Task 7",
     description: "Send weekly report",
     due_date: "2025-05-21",
     completed: true,
   },
   {
-    name: "Task 8",
+    title: "Task 8",
     description: "Optimize database queries",
     due_date: "2025-05-26",
     completed: false,
   },
   {
-    name: "Task 9",
+    title: "Task 9",
     description: "Deploy new version to staging",
     due_date: "2025-05-22",
     completed: true,
   },
   {
-    name: "Task 10",
+    title: "Task 10",
     description: "Design landing page",
     due_date: "2025-05-30",
     completed: false,
   },
   {
-    name: "Task 11",
+    title: "Task 11",
     description: "Learning Gen AI",
     due_date: "2025-05-30",
     completed: false,
@@ -94,6 +96,17 @@ const dummyTasks: Task[] = [
 const TodoPage = () => {
   const [addModal, setAddModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
+
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  useEffect(() => {
+    getTodos()
+      .then((newTodos) => {
+        setTasks(newTodos);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <div className="p-6 bg-slate-100">
       <div className="flex justify-between  items-center">
@@ -112,10 +125,10 @@ const TodoPage = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {dummyTasks.map((task, index) => {
+          {tasks.map((task, index) => {
             return (
               <TableRow key={index}>
-                <TableCell>{task.name}</TableCell>
+                <TableCell>{task.title}</TableCell>
                 <TableCell>{task.description}</TableCell>
                 <TableCell>{task.due_date}</TableCell>
                 <TableCell>

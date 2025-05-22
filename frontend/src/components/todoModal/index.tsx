@@ -15,6 +15,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
+import { addTodo } from "@/api";
 
 const TodoModal = (props: {
   open: boolean;
@@ -26,6 +27,10 @@ const TodoModal = (props: {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState<Date>();
 
+  const createTodo = async () => {
+    const response = await addTodo(title, description, date);
+    console.log("todo created");
+  };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="justify-items-center bg-blue-100">
@@ -70,7 +75,10 @@ const TodoModal = (props: {
           </div>
           <div></div>
           <CardFooter>
-            <Button className="hover:bg-[#0077b6] bg-[#0096c7] text-white font-bold">
+            <Button
+              onClick={createTodo}
+              className="hover:bg-[#0077b6] bg-[#0096c7] text-white font-bold"
+            >
               Add Todo
             </Button>
           </CardFooter>
